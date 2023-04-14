@@ -2,6 +2,8 @@ import "@/styles/globals.css";
 import { MoralisProvider } from "react-moralis";
 import Header from "@/components/Header";
 import Head from "next/head";
+import { ChakraProvider } from "@chakra-ui/react";
+import { NotificationProvider } from "web3uikit";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -13,8 +15,12 @@ export default function App({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MoralisProvider initializeOnMount={false}>
-        <Header />
-        <Component {...pageProps} />;
+        <NotificationProvider>
+          <Header />
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
+        </NotificationProvider>
       </MoralisProvider>
     </div>
   );

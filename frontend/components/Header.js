@@ -12,7 +12,7 @@ export default function Header() {
         <Link href="/talent-badge" className="mr-4 p-6">
           List Badge
         </Link>
-        <Link href="/talent-badge" className="mr-4 p-6">
+        <Link href="/coding-pod" className="mr-4 p-6">
           Start a Test
         </Link>
         <ConnectButton moralisAuth={false} />
