@@ -1,9 +1,8 @@
 const { network } = require("hardhat");
-const {
-    developmentChains,
-    networkConfig,
-} = require("../helper-hardhat-config");
+const { developmentChains, networkConfig } = require("../helper-hardhat-config");
 const { verify } = require("../utils/verify");
+
+const FUND_AMOUNT = "10000000000000000000"; // 10 LINK
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments;
@@ -16,13 +15,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     let vrfCoordinatorV2Address, subId;
 
     if (developmentChains.includes(network.name)) {
-        const vrfCoordinatorV2Mock = await ethers.getContract(
-            "VRFCoordinatorV2Mock"
-        );
+        const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address;
         const txResponse = await vrfCoordinatorV2Mock.createSubscription();
         const txReceipt = await txResponse.wait(1);
         subId = txReceipt.events[0].args.subId;
+        await vrfCoordinatorV2Mock.fundSubscription(subId, FUND_AMOUNT);
     } else {
         vrfCoordinatorV2Address = networkConfig[chainId].vrfCoordinatorV2;
         subId = networkConfig[chainId].subId;
@@ -56,7 +54,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         waitConfirmations: network.config.blockchainConfirmations || 1,
     });
 
-    if (!developmentChains.includes(network.name)) {
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verify contract on etherscan...");
         await verify(challengeSelection.address, args);
     }

@@ -18,7 +18,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         waitConfirmations: network.config.blockchainConfirmations || 1,
     });
 
-    if (!developmentChains.includes(network.name)) {
+    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verify contract on etherscan...");
         await verify(talentPool.address, args);
     }

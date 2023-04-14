@@ -1,28 +1,32 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+
+error TalentsBadge__BadgeNotTransferrable();
 
 // TalentBadge is a soulbound token that represents a talent skill for recruiter screening
-contract TalentBadge is ERC721URIStorage, Ownable {
+contract TalentBadge is ERC721, ERC721URIStorage, Ownable {
+    using Counters for Counters.Counter;
+
     // Might need to customize as unique badge later.
     enum SkillLevel {
-        Novice_Coders, // 1
-        Apprentice_Engineers, // 2
-        Journeyman_Developers, // 3
-        Skilled_Programmers, // 4
-        Adept_Architects, // 5
-        Expert_Artisans, // 6
-        Elite_Enthusiasts, // 7
-        Master_Makers, // 8
-        Grandmaster_Guru // 9
+        Beginner,
+        Intermediate,
+        Advanced,
+        Expert,
+        Master,
+        Grandmaster,
+        Legend
     }
 
     uint256 private immutable i_mintFee;
     string[] internal s_badgeURIs;
-    uint256 private s_badgeCounter;
+    Counters.Counter private s_badgeCounter;
 
     event BadgeMinted(address indexed talentAddress, uint256 indexed badgeId);
 
@@ -31,91 +35,57 @@ contract TalentBadge is ERC721URIStorage, Ownable {
         _;
     }
 
-    constructor(uint256 mintFee) ERC721("TalentBadge", "TB") {
+    constructor(uint256 mintFee, string[] memory badgeURIs) ERC721("TalentBadge", "TB") {
         i_mintFee = mintFee;
+        s_badgeURIs = badgeURIs;
+    }
+
+    // override the _beforeTokenTransfer function to prevent badge for transfer
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId,
+        uint256 batchSize
+    ) internal override(ERC721) {
+        if (from != address(0)) {
+            revert TalentsBadge__BadgeNotTransferrable();
+        }
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
     // after a talent passes a test, the test contract will call this function to mint a badge
-    function mintBadge(
-        uint256 skillLevel
-    ) public hasPassedTest returns (uint256) {
-        uint256 newBadgeId = s_badgeCounter;
-        s_badgeCounter++;
+    function mintBadge(uint256 skillLevel) public returns (uint256) {
+        // add modifier hasPassedTest later
+        // skillLevel may be changed later to reflect testing result data to metadata
+        uint256 newBadgeId = s_badgeCounter.current();
+        s_badgeCounter.increment();
         _safeMint(msg.sender, newBadgeId);
-        _setTokenURI(s_badgeCounter, s_badgeURIs[skillLevel]); // to be updated
+        _setTokenURI(newBadgeId, s_badgeURIs[skillLevel]); // to be updated
         emit BadgeMinted(msg.sender, newBadgeId);
-        return s_badgeCounter;
+        return s_badgeCounter.current();
     }
 
+    // The following functions are overrides required by Solidity.
+    function _burn(uint256 badgeId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(badgeId);
+    }
+
+    function tokenURI(
+        uint256 badgeId
+    ) public view override(ERC721, ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(badgeId);
+    }
+
+    function ownerOf(uint256 badgeId) public view override returns (address) {
+        return super.ownerOf(badgeId);
+    }
+
+    // getters
     function getBadgeCounter() public view returns (uint256) {
-        return s_badgeCounter;
+        return s_badgeCounter.current();
     }
 
     function getBadgeURIs(uint256 index) public view returns (string memory) {
         return s_badgeURIs[index];
     }
-
-    function ownerOf() public {}
 }
-
-// contract TalentBadge is ERC721, ERC721URIStorage {
-//     // owner is the address of the TalentBadge contract issuer, who can issue issue badge to talents
-//     uint256 private s_badgeCounter;
-
-//     address public owner;
-
-//     struct Skill {
-//         string name;
-//         uint256 level;
-//     }
-
-//     mapping(uint256 => Skill) private _tokenSkills;
-//     mapping(address => bool) private hasUnclaimedBadge;
-
-//     constructor() ERC721("TalentBadge", "TB") {}
-
-//     modifier onlyOwner() {
-//         require(msg.sender == owner, "TalentBadge: caller is not the owner");
-//         _;
-//     }
-
-//     function awardBadge(
-//         address recipient,
-//         uint256 tokenId,
-//         string memory tokenURI,
-//         string memory skillName,
-//         uint256 skillLevel
-//     ) external onlyOwner {
-//         hasUnclaimedBadge[recipient] = true;
-//     }
-
-//     function claimBadge(
-//         uint256 tokenId,
-//         string memory tokenURI,
-//         string memory skillName,
-//         uint256 skillLevel
-//     ) external {
-//         require(
-//             hasUnclaimedBadge[msg.sender],
-//             "TalentBadge: caller has no unclaimed badge"
-//         );
-//         _mint(msg.sender, tokenId);
-//         _setTokenURI(tokenId, tokenURI);
-//         _tokenSkills[tokenId] = Skill(skillName, skillLevel);
-//         hasUnclaimedBadge[msg.sender] = false;
-//     }
-
-//     function getSkillLevel(
-//         uint256 tokenId
-//     ) external view returns (string memory, uint256) {
-//         SkillLevel memory skill = _tokenSkills[tokenId];
-//         return (skill.name, skill.level);
-//     }
-
-//     // for recruiter to check talent's badge status
-//     mapping(address => bool) private _hasBadge;
-
-//     // remove the safetrasnferfrom function
-
-//     // Update the skill level after passing a test
-// }

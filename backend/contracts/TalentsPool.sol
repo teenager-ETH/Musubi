@@ -10,11 +10,7 @@ error TalentsPool__PriceMustBeGreaterThanZero();
 error TalentsPool__NotApprovedForListing();
 error TalentsPool__BadgeAlreadyListed(address talentAddress, uint256 badgeId);
 error TalentsPool__BadgeNotListed(address talentAddress, uint256 badgeId);
-error TalentsPool__PayNotEnough(
-    address talentAddress,
-    uint256 badgeId,
-    uint256 price
-);
+error TalentsPool__PayNotEnough(address talentAddress, uint256 badgeId, uint256 price);
 error TalentsPool__NoEarnings();
 error TalentsPool__TransferFailed();
 
@@ -33,24 +29,23 @@ contract TalentsPool {
         uint256 price
     );
 
-    // BadgePrepaid is an event that is emitted when a badge is prepaid
-    event BadgePrepaid(
-        address indexed employerAddress,
-        address indexed badgeAddress,
-        uint256 indexed badgeId,
-        address talentAddress,
-        uint256 price
-    );
-
     event BadgeUnlisted(
         address indexed talentAddress,
         address indexed badgeAddress,
         uint256 indexed badgeId
     );
 
+    // BadgePrepaid is an event that is emitted when a badge is prepaid
+    event BadgePrepaid(
+        address indexed clientAddress,
+        address indexed badgeAddress,
+        uint256 indexed badgeId,
+        address talentAddress,
+        uint256 price
+    );
+
     // mapping from badge address to badge id to badge listing
-    mapping(address => mapping(uint256 => BadgeListing))
-        private s_badgeListings;
+    mapping(address => mapping(uint256 => BadgeListing)) private s_badgeListings;
 
     // mapping from talent address to the total earnings
     mapping(address => uint256) private s_earnings;
@@ -83,9 +78,7 @@ contract TalentsPool {
     }
 
     modifier isListed(address badgeAddress, uint256 badgeId) {
-        if (
-            s_badgeListings[badgeAddress][badgeId].talentAddress == address(0)
-        ) {
+        if (s_badgeListings[badgeAddress][badgeId].talentAddress == address(0)) {
             revert TalentsPool__BadgeNotListed(badgeAddress, badgeId);
         }
         _;
@@ -106,11 +99,7 @@ contract TalentsPool {
         address badgeAddress,
         uint256 badgeId,
         uint256 price
-    )
-        external
-        isOwner(badgeAddress, badgeId, msg.sender)
-        notListed(badgeAddress, badgeId)
-    {
+    ) external isOwner(badgeAddress, badgeId, msg.sender) notListed(badgeAddress, badgeId) {
         if (price < 0) {
             revert TalentsPool__PriceMustBeGreaterThanZero();
         }
@@ -120,10 +109,7 @@ contract TalentsPool {
         if (badge.getApproved(badgeId) != address(this)) {
             revert TalentsPool__NotApprovedForListing();
         }
-        s_badgeListings[badgeAddress][badgeId] = BadgeListing(
-            msg.sender,
-            price
-        );
+        s_badgeListings[badgeAddress][badgeId] = BadgeListing(msg.sender, price);
         emit BadgeListed(msg.sender, badgeAddress, badgeId, price);
     }
 
@@ -131,15 +117,9 @@ contract TalentsPool {
         address badgeAddress,
         uint256 badgeId
     ) external payable isListed(badgeAddress, badgeId) {
-        BadgeListing memory listedBadge = s_badgeListings[badgeAddress][
-            badgeId
-        ];
+        BadgeListing memory listedBadge = s_badgeListings[badgeAddress][badgeId];
         if (msg.value < listedBadge.price) {
-            revert TalentsPool__PayNotEnough(
-                badgeAddress,
-                badgeId,
-                listedBadge.price
-            );
+            revert TalentsPool__PayNotEnough(badgeAddress, badgeId, listedBadge.price);
         }
         s_earnings[listedBadge.talentAddress] += msg.value;
         // delete s_badgeListings[badgeAddress][badgeId]; // shoudn't delete the listing, the talents can accept multiple tasks if they'd like
@@ -157,11 +137,7 @@ contract TalentsPool {
     function unlistBadge(
         address badgeAddress,
         uint256 badgeId
-    )
-        external
-        isOwner(badgeAddress, badgeId, msg.sender)
-        isListed(badgeAddress, badgeId)
-    {
+    ) external isOwner(badgeAddress, badgeId, msg.sender) isListed(badgeAddress, badgeId) {
         delete s_badgeListings[badgeAddress][badgeId];
         emit BadgeUnlisted(msg.sender, badgeAddress, badgeId);
     }
@@ -169,16 +145,12 @@ contract TalentsPool {
     function updatePrice(
         address badgeAddress,
         uint256 badgeId,
-        uint256 price
-    )
-        external
-        isOwner(badgeAddress, badgeId, msg.sender)
-        isListed(badgeAddress, badgeId)
-    {
-        s_badgeListings[badgeAddress][badgeId].price = price;
+        uint256 newPrice
+    ) external isOwner(badgeAddress, badgeId, msg.sender) isListed(badgeAddress, badgeId) {
+        s_badgeListings[badgeAddress][badgeId].price = newPrice;
     }
 
-    function withdrawIncome() external {
+    function withdrawEarnings() external {
         uint256 earning = s_earnings[msg.sender];
         if (earning <= 0) {
             revert TalentsPool__NoEarnings();
@@ -201,9 +173,7 @@ contract TalentsPool {
         return s_badgeListings[badgeAddress][badgeId];
     }
 
-    function getEarnings(
-        address talentAddress
-    ) external view returns (uint256) {
+    function getEarnings(address talentAddress) external view returns (uint256) {
         return s_earnings[talentAddress];
     }
 }

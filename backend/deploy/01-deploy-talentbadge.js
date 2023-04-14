@@ -51,7 +51,20 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log("-------------------------------------");
     log("Deploying TalentBadge...");
 
-    const args = [networkConfig[chainId]["mintFee"]];
+    const badgeURIs = [
+        "https://example.com/badge/0",
+        "https://example.com/badge/1",
+        "https://example.com/badge/2",
+        "https://example.com/badge/3",
+        "https://example.com/badge/4",
+        "https://example.com/badge/5",
+        "https://example.com/badge/6",
+        "https://example.com/badge/7",
+        "https://example.com/badge/8",
+        "https://example.com/badge/9",
+    ];
+
+    const args = [networkConfig[chainId]["mintFee"], badgeURIs];
 
     const talentBadge = await deploy("TalentBadge", {
         from: deployer,

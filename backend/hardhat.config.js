@@ -67,8 +67,11 @@ module.exports = {
             default: 0,
             // 5: 0, // This means Network5(Goerli)'s indexed 1 account is the depolyer
         },
-        player: {
+        talent: {
             default: 1,
+        },
+        employer: {
+            default: 2,
         },
     },
     mocha: {
