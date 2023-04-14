@@ -3,10 +3,25 @@ pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 // TalentBadge is a soulbound token that represents a talent skill for recruiter screening
-contract TalentBadge is ERC721 {
-    string public constant Token_URI = "https://i";
+contract TalentBadge is ERC721URIStorage, Ownable {
+    // Might need to customize as unique badge later.
+    enum SkillLevel {
+        Novice_Coders, // 1
+        Apprentice_Engineers, // 2
+        Journeyman_Developers, // 3
+        Skilled_Programmers, // 4
+        Adept_Architects, // 5
+        Expert_Artisans, // 6
+        Elite_Enthusiasts, // 7
+        Master_Makers, // 8
+        Grandmaster_Guru // 9
+    }
+
+    uint256 private immutable i_mintFee;
+    string[] internal s_badgeURIs;
     uint256 private s_badgeCounter;
 
     event BadgeMinted(address indexed talentAddress, uint256 indexed badgeId);
@@ -16,26 +31,26 @@ contract TalentBadge is ERC721 {
         _;
     }
 
-    constructor() ERC721("TalentBadge", "TB") {}
+    constructor(uint256 mintFee) ERC721("TalentBadge", "TB") {
+        i_mintFee = mintFee;
+    }
 
     // after a talent passes a test, the test contract will call this function to mint a badge
-    function mintBadge() public hasPassedTest returns (uint256) {
+    function mintBadge(uint256 skillLevel) public hasPassedTest returns (uint256) {
         uint256 newBadgeId = s_badgeCounter;
         s_badgeCounter++;
         _safeMint(msg.sender, newBadgeId);
-        // _setTokenURI(s_badgeCounter, Token_URI);
+        _setTokenURI(s_badgeCounter, s_badgeURIs[skillLevel]); // to be updated
         emit BadgeMinted(msg.sender, newBadgeId);
         return s_badgeCounter;
     }
 
-    function tokenURI(
-        uint256 /*tokenId*/
-    ) public view virtual override returns (string memory) {
-        return Token_URI;
-    }
-
     function getBadgeCounter() public view returns (uint256) {
         return s_badgeCounter;
+    }
+
+    function getBadgeURIs(uint256 index) public view returns (string memory) {
+        return s_badgeURIs[index];
     }
 
     function ownerOf() public {}
