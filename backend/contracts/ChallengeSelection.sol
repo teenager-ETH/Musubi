@@ -13,7 +13,8 @@ contract ChallengeSelection is VRFConsumerBaseV2 {
         bool exists; // whether a requestId exists
         uint256[] randomWords;
     }
-    mapping(uint256 => RequestStatus) public s_requests; /* requestId --> requestStatus */
+    mapping(uint256 => RequestStatus)
+        public s_requests; /* requestId --> requestStatus */
     VRFCoordinatorV2Interface COORDINATOR;
 
     // // Challenge number
@@ -51,7 +52,7 @@ contract ChallengeSelection is VRFConsumerBaseV2 {
             i_callbackGasLimit,
             NUM_WORDS
         );
-        emit RequestSent(requestId);
+        emit RequestSent(requestId); // 是否需要把user和
     }
 
     function fulfillRandomWords(

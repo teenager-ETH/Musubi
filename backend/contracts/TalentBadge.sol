@@ -36,7 +36,9 @@ contract TalentBadge is ERC721URIStorage, Ownable {
     }
 
     // after a talent passes a test, the test contract will call this function to mint a badge
-    function mintBadge(uint256 skillLevel) public hasPassedTest returns (uint256) {
+    function mintBadge(
+        uint256 skillLevel
+    ) public hasPassedTest returns (uint256) {
         uint256 newBadgeId = s_badgeCounter;
         s_badgeCounter++;
         _safeMint(msg.sender, newBadgeId);

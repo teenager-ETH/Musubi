@@ -1,5 +1,8 @@
 const { network } = require("hardhat");
-const { developmentChains, networkConfig } = require("../helper-hardhat-config");
+const {
+    developmentChains,
+    networkConfig,
+} = require("../helper-hardhat-config");
 const { verify } = require("../utils/verify");
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
@@ -13,7 +16,9 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     let vrfCoordinatorV2Address, subId;
 
     if (developmentChains.includes(network.name)) {
-        const vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock");
+        const vrfCoordinatorV2Mock = await ethers.getContract(
+            "VRFCoordinatorV2Mock"
+        );
         vrfCoordinatorV2Address = vrfCoordinatorV2Mock.address;
         const txResponse = await vrfCoordinatorV2Mock.createSubscription();
         const txReceipt = await txResponse.wait(1);
