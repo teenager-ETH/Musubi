@@ -8,7 +8,9 @@ import { AttestAbi } from './smart-contract/abi/Attest';
 import { ethers, providers, Wallet } from 'ethers';
 import { BigNumberish } from '@ethersproject/bignumber'
 import { SnarkProof } from './smart-contract/snark.interface';
+import { UserStateTransitionDto } from './dto/userStateTransition.dto';
 
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 @Injectable()
 export class AppService {
   private provider: providers.Provider;
@@ -19,11 +21,11 @@ export class AppService {
     this.config = {
       rpc: 'http://localhost:8545',
       chainId: '31337',
-      attestAddr: '0x663F3ad617193148711d28f5334eE4Ed07016602',
+      attestAddr: '0x057ef64E23666F000b34aE31332854aCBd1c8544',
       unirepAddr: '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e',
     }
     this.provider = new providers.JsonRpcProvider(this.config.rpc);
-    this.wallet = new Wallet('0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a', this.provider);
+    this.wallet = new Wallet(PRIVATE_KEY, this.provider);
 
   }
   async findQuestion(id: string) {
@@ -188,6 +190,27 @@ export class AppService {
     const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
     try {
       const result = await contract.userSignUp(publicSignals, proof);
+      return result;
+    } catch (error) {
+      console.error('Error calling smart contract method:', error);
+      throw error;
+    }
+  }
+
+  public async userStateTransition(
+    params: UserStateTransitionDto
+  ): Promise<any> {
+    const { epoch, publicSignals, proof,
+      orderedTreePublicSignals,
+      orderedTreeProof } = params;
+    console.log(epoch, publicSignals, proof,
+      orderedTreePublicSignals,
+      orderedTreeProof)
+    const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
+    try {
+      const result = await contract.userStateTransition(epoch, publicSignals, proof,
+        orderedTreePublicSignals,
+        orderedTreeProof);
       return result;
     } catch (error) {
       console.error('Error calling smart contract method:', error);

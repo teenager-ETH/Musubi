@@ -8,7 +8,7 @@ error QuestionIdAlreadyClaimed(uint256 identityCommitment,uint256 qid);
 contract Attest is Ownable {
     mapping(uint=>mapping(uint=>bool)) public attestRecord; //commitment=>qid=>if attest
     Unirep private unirep;
-    uint public constant EPOCH_LENGTH = 3600;
+    uint public constant EPOCH_LENGTH = 60*15;
     constructor(address _unirep){
         unirep = Unirep(_unirep);
         unirep.attesterSignUp(EPOCH_LENGTH);

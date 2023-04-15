@@ -12,7 +12,7 @@ const client = new ApolloClient({
   uri: "https://api.studio.thegraph.com/query/45023/musubi/v0.0.2", // api for subgraph: temperary query url from subgraph if testnet
 });
 
-function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
     <div>
       <Head>

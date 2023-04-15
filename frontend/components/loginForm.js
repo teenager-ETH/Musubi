@@ -10,10 +10,11 @@ import { useMoralis } from "react-moralis";
 import { UserState } from '@unirep/core'
 import { BigNumber, ethers } from "ethers";
 import networkMapping from "../constants/networkMapping.json";
-import { ZkIdentity } from "@unirep/utils";
+import { ZkIdentity, stringifyBigInts } from "@unirep/utils";
 import { defaultProver } from "./provers/defaultProver";
 import * as ecies25519 from "@kumarargentra/ecies-25519";
 import { toUtf8Bytes, toUtf8String } from "ethers/lib/utils";
+import { BuildOrderedTree, Circuit } from "@unirep/circuits";
 
 const login = async (setId, address) => {
     const exampleMessage = 'Example `personal_sign` message.';
@@ -40,21 +41,18 @@ const LoginForm = () => {
     const syncUnirep = async (setUserState, identity, setHasSignedUp) => {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const userState = new UserState({
-            attesterId: 583727130935252674806855885237681478564403308034n,
+            attesterId: 31376303960552734473851074669000539669478016324n,
             prover: defaultProver, // a circuit prover
             unirepAddress: unirepAddress,
             provider, // an ethers.js provider
         }, identity)
         setUserState(userState)
-        userState.sync.start()
+        await userState.sync.start()
         await userState.sync.waitForSync()
 
         const signedUp = await userState.hasSignedUp()
         setHasSignedUp(signedUp)
 
-        const toEpoch = await userState.sync.loadCurrentEpoch()
-        // console.log(await userState.latestTransitionedEpoch())
-        // console.log(toEpoch, await userState.genUserStateTransitionProof({toEpoch}))
         if (!signedUp) {
             const { publicSignals, proof } = await userState.genUserSignUpProof()
             // TODO: Call signUp post
@@ -65,7 +63,42 @@ const LoginForm = () => {
             );
             console.log(data)
             setHasSignedUp(signedUp)
+            await userState.sync.waitForSync();
         }
+
+        const toEpoch = await userState.sync.loadCurrentEpoch()
+        const latestTEpoch = await userState.latestTransitionedEpoch()
+        console.log(toEpoch, latestTEpoch)
+        if (latestTEpoch < toEpoch) {
+            const preimages = await userState.sync.genEpochTreePreimages(toEpoch)
+            const { circuitInputs } = BuildOrderedTree.buildInputsForLeaves(preimages)
+            const r = await defaultProver.genProofAndPublicSignals(
+                Circuit.buildOrderedTree,
+                stringifyBigInts(circuitInputs)
+            )
+            const o = new BuildOrderedTree(
+                r.publicSignals,
+                r.proof,
+                defaultProver
+            )
+            const { publicSignals, proof } = await userState.genUserStateTransitionProof(toEpoch)
+            const data = await fetch(
+                `/api/userStateTransition?${new URLSearchParams({
+                    body: JSON.stringify({
+                        epoch: toEpoch,
+                        publicSignals, proof,
+                        orderedTreePublicSignals:o.publicSignals,
+                        orderedTreeProof:o.proof
+                    })
+                })}`
+            );
+            console.log(data)
+            await userState.sync.waitForSync();
+        }
+
+        await userState.sync.waitForSync();
+        console.log(await userState.genProveReputationProof({proveZeroRep:true}))
+
         const fromHexString = hexString =>
             new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
         console.log(BigNumber.from(

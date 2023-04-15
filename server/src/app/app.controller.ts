@@ -15,6 +15,7 @@ import { SuccessResInterceptor } from "~/shared/success-res.interceptor";
 import { JudgerRunDto, JudgerResultDto } from "./dto/judgerRun.dto";
 import { AppService } from "./app.service";
 import { UserSignUpDto } from "./dto/userSignUp.dto";
+import { UserStateTransitionDto } from "./dto/userStateTransition.dto";
 
 
 @Controller()
@@ -22,14 +23,14 @@ import { UserSignUpDto } from "./dto/userSignUp.dto";
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(SuccessResInterceptor)
 export class AppController {
-  constructor(private appService: AppService) {}
+  constructor(private appService: AppService) { }
 
   @Get('/')
   hello() {
     return 'Hello World!';
   }
 
-  @Post("questions") 
+  @Post("questions")
   async questions() {
     const result = await this.appService.questions();
     return result;
@@ -87,15 +88,15 @@ export class AppController {
     if (!judgeJob) {
       throw new StandardException('fail');
     }
-    if (judgeJob.result == 'correct'){
-      try{
+    if (judgeJob.result == 'correct') {
+      try {
         attest = await this.appService.attest(epochKey, judgeJob.question.id, commitment)
-      }catch(e){
+      } catch (e) {
         //TODO: show reverted error
         console.log(e)
         attest = true
       }
-      
+
     }
     return {
       status: judgeJob.status,
@@ -110,6 +111,22 @@ export class AppController {
   async userSignUp(@Body() body: UserSignUpDto) {
     const { publicSignals, proof } = body;
     const result = await this.appService.userSignUp(publicSignals, proof);
+    return {
+      result
+    }
+  }
+
+  @Post('userStateTransition')
+  async userStateTransition(@Body() body: UserStateTransitionDto) {
+
+    const { epoch, publicSignals, proof,
+      orderedTreePublicSignals,
+      orderedTreeProof } = body;
+    const result = await this.appService.userStateTransition({
+      epoch, publicSignals, proof,
+      orderedTreePublicSignals,
+      orderedTreeProof
+    });
     return {
       result
     }

@@ -155,5 +155,38 @@ export const AttestAbi = [
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "publicSignals",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[8]",
+        "name": "proof",
+        "type": "uint256[8]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "orderedTreePublicSignals",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[8]",
+        "name": "orderedTreeProof",
+        "type": "uint256[8]"
+      }
+    ],
+    "name": "userStateTransition",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   }
 ]

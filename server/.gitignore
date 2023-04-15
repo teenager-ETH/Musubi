@@ -2,3 +2,4 @@ node_modules
 temporary/*
 !temporary/.gitkeep
 dist/
+.env
