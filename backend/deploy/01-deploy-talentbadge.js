@@ -29,9 +29,9 @@ const metadataTemplate = {
 };
 
 let badgeURIs = [
-    "ipfs://QmZ3eaa5EN9JDp8FrLcVhiy6eTppnyNd3wPKsSaLW8rgK7",
-    "ipfs://QmZ3eaa5EN9JDp8FrLcVhiy6eTppnyNd3wPKsSaLW8rgK7",
-    "ipfs://QmZ3eaa5EN9JDp8FrLcVhiy6eTppnyNd3wPKsSaLW8rgK7",
+    "ipfs://QmPmhbtwAd65vmva3cjgWCuxEFq7fQALTtY1j7host3ZUb",
+    "ipfs://QmWjX4gxpC5KJ1Hm1uf78wJhoHvEWcQek66XwNepJUJta9",
+    "ipfs://Qmd2eW3UveT5T4fgCP8Zw97s5aYw6x7dpAmwkB94fAvMo1",
 ];
 
 module.exports = async ({ getNamedAccounts, deployments }) => {

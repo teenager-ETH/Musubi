@@ -16,11 +16,11 @@ contract TalentBadge is ERC721, ERC721URIStorage, Ownable {
     // Might need to customize as unique badge later.
     enum SkillLevel {
         Beginner,
-        Intermediate,
-        Advanced,
+        // Intermediate,
+        // Advanced,
         Expert,
-        Master,
-        Grandmaster,
+        // Master,
+        // Grandmaster,
         Legend
     }
 
