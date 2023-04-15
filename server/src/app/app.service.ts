@@ -4,10 +4,28 @@ import { IConfig } from '~/configs';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { exec } from 'node:child_process';
+import { AttestAbi } from './smart-contract/abi/Attest';
+import { ethers, providers, Wallet } from 'ethers';
+import { BigNumberish } from '@ethersproject/bignumber'
+import { SnarkProof } from './smart-contract/snark.interface';
 
 @Injectable()
 export class AppService {
-  constructor(private configService: ConfigService) {}
+  private provider: providers.Provider;
+  private wallet: Wallet;
+  public config: any;
+  constructor(private configService: ConfigService) {
+
+    this.config = {
+      rpc: 'http://localhost:8545',
+      chainId: '31337',
+      attestAddr: '0x663F3ad617193148711d28f5334eE4Ed07016602',
+      unirepAddr: '0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e',
+    }
+    this.provider = new providers.JsonRpcProvider(this.config.rpc);
+    this.wallet = new Wallet('0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a', this.provider);
+
+  }
   async findQuestion(id: string) {
     const quesConfig =
       this.configService.get<IConfig['questions']>('questions')!;
@@ -18,6 +36,7 @@ export class AppService {
       await fs.readFile(path.resolve(quesConfig.path, id, 'code.sol'))
     ).toString();
     return {
+      id,
       test,
       code,
     };
@@ -73,7 +92,7 @@ export class AppService {
     let reporter: Record<string, any> | null = null;
     try {
       reporter = JSON.parse(reporterStr);
-    } catch (e) {}
+    } catch (e) { }
     if (!reporter) {
       return {
         status: 'completed',
@@ -87,7 +106,16 @@ export class AppService {
     const passCount = reporter.stats.passes;
     const failCount = reporter.stats.failures;
 
+    let questionStr: string | null = null;
+    let question;
+    try {
+      questionStr = await fs.readFile(path.join(folder, 'question.json'), 'utf-8');
+      question = JSON.parse(questionStr)
+    } catch (e: unknown) {
+      //
+    }
     return {
+      question,
       status: 'completed',
       result: finalResult,
       passCount,
@@ -149,6 +177,32 @@ export class AppService {
       project.children.forEach((sub: Record<string, any>) =>
         this.transProjectPath(sub, basePath)
       );
+    }
+  }
+
+  public async userSignUp(
+    publicSignals: BigNumberish[],
+    proof: SnarkProof | BigNumberish[]
+  ): Promise<any> {
+
+    const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
+    try {
+      const result = await contract.userSignUp(publicSignals, proof);
+      return result;
+    } catch (error) {
+      console.error('Error calling smart contract method:', error);
+      throw error;
+    }
+  }
+
+  public async attest(epochKey: BigNumberish, qid: BigNumberish, commitment: BigNumberish): Promise<any> {
+    const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
+    try {
+      const result = await contract.attest(epochKey, qid, commitment);
+      return result;
+    } catch (error) {
+      console.error('Error calling smart contract method:', error);
+      throw error;
     }
   }
 }

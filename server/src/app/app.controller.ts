@@ -14,6 +14,8 @@ import { StandardException } from "~/shared/standard.exception";
 import { SuccessResInterceptor } from "~/shared/success-res.interceptor";
 import { JudgerRunDto, JudgerResultDto } from "./dto/judgerRun.dto";
 import { AppService } from "./app.service";
+import { UserSignUpDto } from "./dto/userSignUp.dto";
+
 
 @Controller()
 @UsePipes(RestValidationPipe)
@@ -59,6 +61,12 @@ export class AppController {
           path: "/test/file.js",
           content: ques.test,
         },
+        {
+          name: "question.json",
+          type: "file",
+          path: "question.json",
+          content: JSON.stringify(ques),
+        },
       ],
     };
 
@@ -73,16 +81,37 @@ export class AppController {
 
   @Post("result")
   async result(@Body() body: JudgerResultDto) {
-    const { judgeId } = body;
+    let attest;
+    const { judgeId, epochKey, commitment } = body;
     const judgeJob = await this.appService.findResult(judgeId);
     if (!judgeJob) {
       throw new StandardException('fail');
+    }
+    if (judgeJob.result == 'correct'){
+      try{
+        attest = await this.appService.attest(epochKey, judgeJob.question.id, commitment)
+      }catch(e){
+        //TODO: show reverted error
+        console.log(e)
+        attest = true
+      }
+      
     }
     return {
       status: judgeJob.status,
       passCount: judgeJob.passCount,
       failCount: judgeJob.failCount,
       result: judgeJob.result,
+      attest: attest
     };
+  }
+
+  @Post('userSignUp')
+  async userSignUp(@Body() body: UserSignUpDto) {
+    const { publicSignals, proof } = body;
+    const result = await this.appService.userSignUp(publicSignals, proof);
+    return {
+      result
+    }
   }
 }
