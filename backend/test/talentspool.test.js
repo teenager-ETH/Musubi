@@ -33,7 +33,7 @@ const { developmentChains } = require("../helper-hardhat-config");
               }); // employer prepay badge
               // get balance of talent
               const prevBalance = await ethers.provider.getBalance(talent.address);
-              const txResponse = await talentsPoolConnectedTalent.withdrawIncome(); // talent withdraw income
+              const txResponse = await talentsPoolConnectedTalent.withdrawEarnings(); // talent withdraw income
               const txReceipt = await txResponse.wait();
               const gasUsed = txReceipt.gasUsed;
               const gasPrice = txResponse.gasPrice;

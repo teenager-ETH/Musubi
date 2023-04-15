@@ -9,7 +9,7 @@ const { developmentChains } = require("../helper-hardhat-config");
           beforeEach(async () => {
               accounts = await ethers.getSigners();
               deployer = accounts[0];
-              await deployments.fixture(["TalentBadge"]);
+              await deployments.fixture(["talentBadge"]);
               talentBadge = await ethers.getContract("TalentBadge");
           });
 

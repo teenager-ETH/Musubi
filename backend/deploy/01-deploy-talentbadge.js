@@ -28,7 +28,11 @@ const metadataTemplate = {
     ],
 };
 
-let badgeURIs;
+let badgeURIs = [
+    "https://example.com/badge/0",
+    "https://example.com/badge/1",
+    "https://example.com/badge/2",
+];
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deploy, log } = deployments;
