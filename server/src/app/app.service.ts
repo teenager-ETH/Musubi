@@ -219,6 +219,7 @@ export class AppService {
   }
 
   public async attest(epochKey: BigNumberish, qid: BigNumberish, commitment: BigNumberish): Promise<any> {
+    console.log(epochKey, qid, commitment)
     const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
     try {
       const result = await contract.attest(epochKey, qid, commitment);

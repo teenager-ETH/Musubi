@@ -2776,7 +2776,7 @@
     randombytes "^2.1.0"
     tslib "1.14.1"
 
-"@unirep/circuits@2.0.0-beta-1", "@unirep/circuits@^2.0.0-beta-1":
+"@unirep/circuits@2.0.0-beta-1":
   version "2.0.0-beta-1"
   resolved "https://registry.yarnpkg.com/@unirep/circuits/-/circuits-2.0.0-beta-1.tgz#509032805a061ce504352a65c5bc1b8c21a8d71f"
   integrity sha512-JxIRGuTgMKsjNMpsrbJvG36TwmkYxi3uz6aiokmpXGf91NP+X2ZtB6ZNqSUvJv8iMvyAjfCSPfmm/zAQ29/4yA==
@@ -2798,7 +2798,7 @@
     poseidon-solidity "^0.0.3"
     solc "^0.8.16"
 
-"@unirep/core@^2.0.0-beta-1":
+"@unirep/core@2.0.0-beta-1":
   version "2.0.0-beta-1"
   resolved "https://registry.yarnpkg.com/@unirep/core/-/core-2.0.0-beta-1.tgz#375993954c574516a804103883a44d3db8ef906d"
   integrity sha512-cUsNDY/wHriSpvFwm5Uxokpjz09JHSngejqepl1wL2N0pIEmIM3470ZB3pN6DK4ZyA3iECdehomC3iINgKYuWg==
@@ -2820,14 +2820,12 @@
     maci-crypto "^0.9.1"
     poseidon-lite "^0.0.2"
 
-"@unirep/utils@^2.0.0-beta-1":
-  version "2.0.0-beta-2"
-  resolved "https://registry.yarnpkg.com/@unirep/utils/-/utils-2.0.0-beta-2.tgz#e761bbd041fdd7d2e212d45ca10dd1f3004844cf"
-  integrity sha512-z1lQ/GO73ab7bYNckCKRl7/ynXWA86/UKkwMWLKt0skZAGI5IqOF8yw1SUJzZWUXHLN5tdFtoiqZY1dPeH6xSw==
+"@unirep/utils@file:../utils":
+  version "2.0.0-beta-1"
   dependencies:
     "@zk-kit/incremental-merkle-tree" "^0.4.3"
+    maci-crypto "^0.9.1"
     poseidon-lite "^0.0.2"
-    randomf "^0.0.1"
 
 "@walletconnect/browser-utils@^1.8.0":
   version "1.8.0"
@@ -6370,13 +6368,14 @@ fresh@0.5.2:
     "@kumarargentra/ecies-25519" "^1.0.10"
     "@monaco-editor/react" "^4.4.6"
     "@semaphore-protocol/identity" "^3.6.0"
-    "@unirep/circuits" "^2.0.0-beta-1"
-    "@unirep/core" "^2.0.0-beta-1"
-    "@unirep/utils" "^2.0.0-beta-1"
+    "@unirep/circuits" "2.0.0-beta-1"
+    "@unirep/core" "2.0.0-beta-1"
+    "@unirep/utils" "file:../../Library/Caches/Yarn/v6/npm-frontend-0.1.0-faf0a2cd-829e-4946-9cb0-ff4d9e758ea2-1681576060592/node_modules/utils"
     body-parser "^1.20.2"
+    crypto-browserify "^3.12.0"
     ethers "5.7.2"
     framer-motion "^10.10.0"
-    frontend "file:../../../../Library/Caches/Yarn/v6/npm-frontend-0.1.0-847b1504-e7ce-4e18-ad40-0e9033e9dce3-1681565958928/node_modules/frontend"
+    frontend "file:../../Library/Caches/Yarn/v6/npm-frontend-0.1.0-faf0a2cd-829e-4946-9cb0-ff4d9e758ea2-1681576060592/node_modules/frontend"
     graphql "^16.6.0"
     jotai "^2.0.3"
     moralis "^2.18.1"
@@ -8982,11 +8981,6 @@ randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.1.0:
   integrity sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
   dependencies:
     safe-buffer "^5.1.0"
-
-randomf@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/randomf/-/randomf-0.0.1.tgz#2d4e524b0da778eef0daa8bb70f82c2ae9569e28"
-  integrity sha512-yaKZlDxEsJlUSIl/r0PC7t8PaGuTvKBkGuztibkkfg+pSv6tjwYAhaLHf0bkAEq8rwPDHeAk7VlVJ/8uCPElgQ==
 
 randomfill@^1.0.3:
   version "1.0.4"

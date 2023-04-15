@@ -46,9 +46,12 @@ const LoginForm = () => {
             unirepAddress: unirepAddress,
             provider, // an ethers.js provider
         }, identity)
+        console.log(userState)
         setUserState(userState)
         await userState.sync.start()
+        console.log(1)
         await userState.sync.waitForSync()
+        console.log(2)
 
         const signedUp = await userState.hasSignedUp()
         setHasSignedUp(signedUp)
@@ -65,7 +68,8 @@ const LoginForm = () => {
             setHasSignedUp(signedUp)
             await userState.sync.waitForSync();
         }
-
+        console.log(await userState.sync.calcCurrentEpoch())
+        
         const toEpoch = await userState.sync.loadCurrentEpoch()
         const latestTEpoch = await userState.latestTransitionedEpoch()
         console.log(toEpoch, latestTEpoch)
@@ -93,11 +97,9 @@ const LoginForm = () => {
                 })}`
             );
             console.log(data)
-            await userState.sync.waitForSync();
         }
-
         await userState.sync.waitForSync();
-        console.log(await userState.genProveReputationProof({proveZeroRep:true}))
+        // console.log(await userState.genProveReputationProof({proveZeroRep:true}))
 
         const fromHexString = hexString =>
             new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
