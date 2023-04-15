@@ -1,13 +1,13 @@
-import CodingPad from "@/components/CodingPad";
+import CodingPad from '@/components/CodingPad';
 import {
   questionsAtom,
   userCodeAtom,
   userResult,
-} from "@/components/CodingPad/state";
-import { useAtom } from "jotai";
-import { useEffect } from "react";
-import { useMoralis } from "react-moralis";
-import { Stack, Skeleton } from "@chakra-ui/react";
+} from '@/components/CodingPad/state';
+import { useAtom } from 'jotai';
+import { useEffect } from 'react';
+import { useMoralis } from 'react-moralis';
+import { Stack, Skeleton } from '@chakra-ui/react';
 
 const BACKEND_API = process.env.BACKEND_API;
 
@@ -27,9 +27,9 @@ export default function CodingPod(props) {
     setUserResult(
       data?.reduce((n, i) => {
         n[i.id] = {
-          finnalResult: "-",
-          passedTest: "-",
-          failedTest: "-",
+          finnalResult: '-',
+          passedTest: '-',
+          failedTest: '-',
         };
         return n;
       }, {})
@@ -46,34 +46,34 @@ export default function CodingPod(props) {
 
   return (
     <>
-      <div className="h-[calc(100vh-114px)]">
+      <div className='h-[calc(100vh-114px)]'>
         {isWeb3Enabled && chainId ? (
           <CodingPad questions={data} />
         ) : (
-          <div className="w-full h-full px-4 py-8 flex gap-8">
-            <Stack width={"30%"}>
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
+          <div className='w-full h-full px-4 py-8 flex gap-8'>
+            <Stack width={'30%'}>
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
             </Stack>
             <Stack flex={1}>
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
             </Stack>
-            <Stack width={"30%"}>
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
-              <Skeleton height="35px" />
+            <Stack width={'30%'}>
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
+              <Skeleton height='35px' />
             </Stack>
           </div>
         )}
@@ -82,19 +82,9 @@ export default function CodingPod(props) {
   );
 }
 
-export async function getStaticProps() {
-  const judgeUrl = process.env.JUDGE_API;
-
-  const response = await fetch(judgeUrl + "/outer/api/questions", {
-    method: "POST",
-    body: JSON.stringify({
-      trace_id: "2ad1131c-309b-4507-97c9-3c91f1588cdf",
-      version: "UNKNOWN_VERSION",
-      data: {},
-    }),
-  });
-  const data = await response.json();
-
+export async function getStaticProps(context) {
+  const res = await fetch(`${BACKEND_API}/api/questions`);
+  const data = await res.json();
   return {
     props: {
       data: data?.data,

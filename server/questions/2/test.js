@@ -5,55 +5,61 @@ const developmentChains = ["hardhat", "localhost"];
 
 !developmentChains.includes(network.name)
     ? describe.skip
-    : describe("AttackChanllenge", function () {
-          let decentralizedBanktoAttackContract,
-              attackChallengeContract,
+    : describe("Attack", function () {
+          let decentralizedBanktoAttackFixChallengeContract,
+              attackContract,
               deployer,
               talent;
 
-          // deploye the DecentralizedBanktoAttack contract and the AttackChallenge contract completed by the talent
           before(async function () {
-              const DecentralizedBanktoAttackContract =
-                  await ethers.getContractFactory("DecentralizedBanktoAttack");
+              // 部署银行合约
+              const DecentralizedBanktoAttackFixChallengeContract =
+                  await ethers.getContractFactory(
+                      "DecentralizedBanktoAttackFixChallenge"
+                  );
 
-              decentralizedBanktoAttackContract =
-                  await DecentralizedBanktoAttackContract.deploy();
+              decentralizedBanktoAttackFixChallengeContract =
+                  await DecentralizedBanktoAttackFixChallengeContract.deploy();
 
-              await decentralizedBanktoAttackContract.deployed();
+              await decentralizedBanktoAttackFixChallengeContract.deployed();
 
               await deployments.fixture();
-
               deployer = (await getNamedAccounts()).deployer;
               talent = (await getNamedAccounts()).talent;
 
-              console.log("deployer: ", deployer, "telent: ", talent);
-
-              const AttackChallengeContract = await ethers.getContractFactory(
-                  "AttackChallenge"
+              // 部署攻击合约
+              const AttackContract = await ethers.getContractFactory("Attack");
+              attackContract = await AttackContract.deploy(
+                  decentralizedBanktoAttackFixChallengeContract.address
               );
-              attackChallengeContract = await AttackChallengeContract.deploy(
-                  decentralizedBanktoAttackContract.address
-              );
-              await attackChallengeContract.deployed();
+              await attackContract.deployed();
 
-              decentralizedBanktoAttackContract.connect(deployer);
-              await decentralizedBanktoAttackContract.deposit({
+              // deployer deposit 10 eths to the decentralized bank
+              // deployer链接到银行合约
+              decentralizedBanktoAttackFixChallengeContract.connect(deployer);
+
+              // 向银行存入10个以太
+              await decentralizedBanktoAttackFixChallengeContract.deposit({
                   value: ethers.utils.parseEther("10"),
               });
           });
 
-          describe("if the talent is able to steal the money", function () {
-              it("Bank should have 0, which is drained", async function () {
+          describe("if the talent can't steal the money", function () {
+              it("Bank should have 10, which is drained", async function () {
                   // the talent is able to steal the money
-                  await attackChallengeContract.connect(talent);
-                  await attackChallengeContract.attack({
-                      value: ethers.utils.parseEther("1"),
-                  });
+                  await attackContract.connect(talent);
+                  await expect(
+                      attackContract.attack({
+                          value: ethers.utils.parseEther("1"),
+                      })
+                  ).to.be.revertedWith("Failed to send Ether");
+
                   expect(
-                      await decentralizedBanktoAttackContract.getBalance()
-                  ).to.equal(ethers.utils.parseEther("0"));
-                  expect(await attackChallengeContract.getBalance()).to.equal(
-                      ethers.utils.parseEther("11")
+                      await decentralizedBanktoAttackFixChallengeContract.getBalance()
+                  ).to.equal(ethers.utils.parseEther("10"));
+
+                  expect(await attackContract.getBalance()).to.equal(
+                      ethers.utils.parseEther("0")
                   );
               });
           });

@@ -12,4 +12,6 @@ export class JudgerRunDto {
 export class JudgerResultDto {
   @IsString()
   judgeId!: string;
+  epochKey!: string;
+  commitment!: string;
 }

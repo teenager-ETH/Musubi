@@ -34,3 +34,8 @@ export const isAllCompletedAtom = atom((get) => {
   const resultList = Object.values(get(userResult));
   return resultList?.every((ele) => ele?.status === 'completed');
 });
+
+export const identityState = atom({})
+export const unirepState = atom({})
+export const signedUpState = atom(false)
+export const enckeyPairAtom = atom({})
