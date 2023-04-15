@@ -40,7 +40,7 @@ export function handleBadgeListed(event: BadgeListedEvent): void {
     );
   }
 
-  badgeListed.talentAddress = badgeListed.talentAddress;
+  badgeListed.talentAddress = event.params.talentAddress;
   activeItem.talentAddress = event.params.talentAddress;
 
   badgeListed.badgeAddress = event.params.badgeAddress;
@@ -51,6 +51,10 @@ export function handleBadgeListed(event: BadgeListedEvent): void {
 
   badgeListed.price = event.params.price;
   activeItem.price = event.params.price;
+
+  activeItem.clientAddress = Address.fromString(
+    "0x0000000000000000000000000000000000000000"
+  );
 
   badgeListed.save();
   activeItem.save();
@@ -103,13 +107,6 @@ export function handleBadgePrepaid(event: BadgePrepaidEvent): void {
   badgePrepaid.badgeId = event.params.badgeId;
   badgePrepaid.talentAddress = badgePrepaid.talentAddress;
   activeItem!.clientAddress = event.params.clientAddress;
-
-  badgePrepaid.save();
-  activeItem!.save();
-
-  activeItem.buyer = Address.fromString(
-    "0x0000000000000000000000000000000000000000"
-  );
 
   badgePrepaid.save(); // save the event converted object to the graph
   activeItem!.save();

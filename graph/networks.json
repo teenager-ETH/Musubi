@@ -1,0 +1,8 @@
+{
+  "goerli": {
+    "TalentsPool": {
+      "address": "0x1b46d5b354a2da383f23a5230B6dD0edf64d3708",
+      "startBlock": 8833051
+    }
+  }
+}

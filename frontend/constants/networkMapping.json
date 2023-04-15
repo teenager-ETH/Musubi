@@ -1,14 +1,9 @@
 {
-    "421613": {
-        "TalentsPool": [
-            "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
-        ],
-        "Unirep":"0x6354F74F29982190B0a830Ac46E279B03d5e169c"
-    },
-    "31337": {
-        "TalentsPool": [
-            "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
-        ],
-        "Unirep":"0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e"
-    }
+  "5": { "TalentsPool": ["0x1b46d5b354a2da383f23a5230B6dD0edf64d3708"] },
+  "31337": {
+    "TalentsPool": [
+      "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+    ]
+  }
 }

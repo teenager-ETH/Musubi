@@ -2820,12 +2820,14 @@
     maci-crypto "^0.9.1"
     poseidon-lite "^0.0.2"
 
-"@unirep/utils@file:../../Unirep/packages/utils":
-  version "2.0.0-beta-1"
+"@unirep/utils@^2.0.0-beta-1":
+  version "2.0.0-beta-2"
+  resolved "https://registry.yarnpkg.com/@unirep/utils/-/utils-2.0.0-beta-2.tgz#e761bbd041fdd7d2e212d45ca10dd1f3004844cf"
+  integrity sha512-z1lQ/GO73ab7bYNckCKRl7/ynXWA86/UKkwMWLKt0skZAGI5IqOF8yw1SUJzZWUXHLN5tdFtoiqZY1dPeH6xSw==
   dependencies:
     "@zk-kit/incremental-merkle-tree" "^0.4.3"
-    maci-crypto "^0.9.1"
     poseidon-lite "^0.0.2"
+    randomf "^0.0.1"
 
 "@walletconnect/browser-utils@^1.8.0":
   version "1.8.0"
@@ -6360,6 +6362,7 @@ fresh@0.5.2:
 "frontend@file:.":
   version "0.1.0"
   dependencies:
+    "@apollo/client" "^3.7.12"
     "@chakra-ui/icons" "^2.0.18"
     "@chakra-ui/react" "^2.5.5"
     "@emotion/react" "^11.10.6"
@@ -6369,11 +6372,12 @@ fresh@0.5.2:
     "@semaphore-protocol/identity" "^3.6.0"
     "@unirep/circuits" "^2.0.0-beta-1"
     "@unirep/core" "^2.0.0-beta-1"
-    "@unirep/utils" "file:../../Unirep/packages/utils"
+    "@unirep/utils" "^2.0.0-beta-1"
     body-parser "^1.20.2"
     ethers "5.7.2"
     framer-motion "^10.10.0"
-    frontend "file:../../Library/Caches/Yarn/v6/npm-frontend-0.1.0-4d62fd68-b474-4ae6-bc52-b63f9c341129-1681545921738/node_modules/frontend"
+    frontend "file:../../../../Library/Caches/Yarn/v6/npm-frontend-0.1.0-847b1504-e7ce-4e18-ad40-0e9033e9dce3-1681565958928/node_modules/frontend"
+    graphql "^16.6.0"
     jotai "^2.0.3"
     moralis "^2.18.1"
     moralis-v1 "^1.12.0"
@@ -8978,6 +8982,11 @@ randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.1.0:
   integrity sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
   dependencies:
     safe-buffer "^5.1.0"
+
+randomf@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/randomf/-/randomf-0.0.1.tgz#2d4e524b0da778eef0daa8bb70f82c2ae9569e28"
+  integrity sha512-yaKZlDxEsJlUSIl/r0PC7t8PaGuTvKBkGuztibkkfg+pSv6tjwYAhaLHf0bkAEq8rwPDHeAk7VlVJ/8uCPElgQ==
 
 randomfill@^1.0.3:
   version "1.0.4"
