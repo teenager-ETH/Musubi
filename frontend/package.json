@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.12",
     "@chakra-ui/icons": "^2.0.18",
     "@chakra-ui/react": "^2.5.5",
     "@emotion/react": "^11.10.6",
@@ -16,6 +17,7 @@
     "@monaco-editor/react": "^4.4.6",
     "body-parser": "^1.20.2",
     "framer-motion": "^10.10.0",
+    "graphql": "^16.6.0",
     "jotai": "^2.0.3",
     "moralis": "^2.18.1",
     "moralis-v1": "^1.12.0",

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"; // Usetate to track the imageURI
 import { useWeb3Contract, useMoralis } from "react-moralis";
 import talentsPoolABI from "../constants/TalentsPool.json";
 import talentBadgeABI from "../constants/TalentBadge.json";
-import Image from "next/image";
+import Image from "next/image"; // to host it on IPFS, we cannot use Image from nextjs
 import { Card, useNotification } from "web3uikit";
 import { ethers } from "ethers";
 import UpdateListingModal from "./UpdateListingModal";

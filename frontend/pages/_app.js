@@ -4,8 +4,15 @@ import Header from "@/components/Header";
 import Head from "next/head";
 import { ChakraProvider } from "@chakra-ui/react";
 import { NotificationProvider } from "web3uikit";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
-export default function App({ Component, pageProps }) {
+// follow the ApolloClient doc
+const client = new ApolloClient({
+  cache: new InMemoryCache(), // help with refresh
+  uri: "https://", // api for subgraph: temperary query url from subgraph if testnet
+});
+
+function App({ Component, pageProps }) {
   return (
     <div>
       <Head>
@@ -15,12 +22,14 @@ export default function App({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MoralisProvider initializeOnMount={false}>
-        <NotificationProvider>
-          <Header />
-          <ChakraProvider>
-            <Component {...pageProps} />
-          </ChakraProvider>
-        </NotificationProvider>
+        <ApolloProvider client={client}>
+          <NotificationProvider>
+            <Header />
+            <ChakraProvider>
+              <Component {...pageProps} />
+            </ChakraProvider>
+          </NotificationProvider>
+        </ApolloProvider>
       </MoralisProvider>
     </div>
   );
