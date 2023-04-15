@@ -35,6 +35,7 @@ module.exports = {
             url: "http://127.0.0.1:8545/",
             // hardhat handled it, run "% yarn hardhat node" to check it out
             chainId: 31337,
+            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
         },
         goerli: {
             url: GOERLI_RPC_URL,

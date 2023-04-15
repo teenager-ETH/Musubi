@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "hardhat compile",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@unirep/contracts": "^2.0.0-beta-2",
     "magic-sdk": "^13.5.0",
     "moralis": "^1.8.0",
     "moralis-v1": "^1.12.0",
