@@ -28,11 +28,13 @@ export default function Home() {
               <div>Loading...</div>
             ) : (
               listedBadges.activeItems.map((badge) => {
-                const { price, badgeAddress, badgeId, seller } = badge;
+                const { price, badgeAddress, badgeId, seller, talentAddress } =
+                  badge;
                 return talentsPoolAddress ? (
                   <BadgeHolder
                     price={price} // from query
                     badgeAddress={badgeAddress} // from query
+                    badgeOwner={talentAddress}
                     badgeId={badgeId} // from query
                     talentPoolAddress={talentsPoolAddress} // from networkMapping
                     seller={seller} // from query

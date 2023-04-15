@@ -46,10 +46,10 @@ export default function BadgeHolder({
     const badgeURI = await getBadgeURI();
     console.log("badgeURI", badgeURI);
     // not every brwoser supports IPFS. So we need to use https instead of ipfs edition
-    if (badgeURI) {
+    if (badgeURI && badgeURI.includes("ipfs://")) {
       // IPFS Gateway: make https call to return IPFS files
       const requestURL = badgeURI.replace("ipfs://", "https://ipfs.io/ipfs/");
-      const badgeURIResponse = await (await fetch(requestURL)).json(); // await to fetcg and get the JSON response, then await to convet it to JSON
+      const badgeURIResponse = await (await fetch(requestURL)).json(); // await to fetch and get the JSON response, then await to convert it to JSON
       const imageURI = badgeURIResponse.image;
       const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/");
       setImageURI(imageURIURL);
@@ -112,7 +112,7 @@ export default function BadgeHolder({
             >
               <div className="p-2">
                 <div className="flex flex-col items-end gap-2">
-                  <div>#{tokenId}</div>
+                  <div>#{badgeId}</div>
                   <div className="italic text-sm">
                     Owned by {formattedBadgeOwnerAddress}
                   </div>
