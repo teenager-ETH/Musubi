@@ -29,9 +29,9 @@ const metadataTemplate = {
 };
 
 let badgeURIs = [
-    "https://example.com/badge/0",
-    "https://example.com/badge/1",
-    "https://example.com/badge/2",
+    "ipfs://QmZ3eaa5EN9JDp8FrLcVhiy6eTppnyNd3wPKsSaLW8rgK7",
+    "ipfs://QmZ3eaa5EN9JDp8FrLcVhiy6eTppnyNd3wPKsSaLW8rgK7",
+    "ipfs://QmZ3eaa5EN9JDp8FrLcVhiy6eTppnyNd3wPKsSaLW8rgK7",
 ];
 
 module.exports = async ({ getNamedAccounts, deployments }) => {

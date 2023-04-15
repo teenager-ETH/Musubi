@@ -38,20 +38,7 @@ async function updateContractAddresses() {
     } else {
         contractAddresses[chainId] = { TalentsPool: [curAddress] };
     }
-
     fs.writeFileSync(frontEndContractsFile, JSON.stringify(contractAddresses));
-    
-    const talentsBadge = await ethers.getContract("TalentsBadge");
-    const badgeContractAddresses = JSON.parse(fs.readFileSync(frontEndContractsFile, "utf8"));
-    const curBadgeAddress = talentsBadge.address;
-    if (chainId in badgeContractAddresses) {
-        if (!badgeContractAddresses[chainId]["TalentsBadge"].includes(curBadgeAddress)) {
-            badgeContractAddresses[chainId]["TalentsBadge"].push(curBadgeAddress);
-        }
-    } else {
-        badgeContractAddresses[chainId] = { TalentsBadge: [curBadgeAddress] };
-    }
-    fs.writeFileSync(frontEndContractsFile, JSON.stringify(badgeContractAddresses));
 }
 
 module.exports.tags = ["all", "frontend"];
