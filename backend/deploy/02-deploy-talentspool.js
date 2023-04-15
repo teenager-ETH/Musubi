@@ -26,4 +26,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     log("-------------------------------------");
 };
 
-module.exports.tags = ["all", "talenPool", "main"];
+module.exports.tags = ["all", "talentPool", "main"];

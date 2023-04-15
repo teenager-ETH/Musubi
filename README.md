@@ -5,5 +5,6 @@
 3. Talent solve challenges to get ranking
 4. Clients to quickly design the metrics
 
-IPFS/Pinata
+IPFS/Pinata to Store
 CodePad
+Index from Graph

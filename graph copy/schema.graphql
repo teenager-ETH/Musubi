@@ -1,0 +1,33 @@
+# This file will define how our table looks like
+type ActiveItem @entity {
+  id: ID!
+  clientAddress: Bytes! # address
+  talentAddress: Bytes! # address
+  badgeAddress: Bytes! # address
+  badgeId: BigInt!
+  price: BigInt # service can be null, which is free
+}
+
+type BadgeListed @entity {
+  id: ID!
+  talentAddress: Bytes! # address
+  badgeAddress: Bytes! # address
+  badgeId: BigInt!
+  price: BigInt
+}
+
+type BadgeUnlisted @entity {
+  id: ID!
+  talentAddress: Bytes! # address
+  badgeAddress: Bytes! # address
+  badgeId: BigInt!
+}
+
+type BadgePrepaid @entity {
+  id: ID!
+  clientAddress: Bytes! # address
+  badgeAddress: Bytes! # address
+  badgeId: BigInt!
+  talentAddress: Bytes! # address
+  price: BigInt
+}
