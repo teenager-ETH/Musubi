@@ -2,29 +2,37 @@ import { Button } from '@chakra-ui/button';
 import { useAtom } from 'jotai';
 import {
   curQuestionIdAtom,
+  identityState,
   isRunningTestAtom,
   userCodeAtom,
   userResult,
+  unirepState
 } from './state';
+
 
 export default function CodeResult() {
   const [result, setResult] = useAtom(userResult);
   const [curQuesId] = useAtom(curQuestionIdAtom);
   const [codes] = useAtom(userCodeAtom);
   const [isRunningTest, setIsRunningTest] = useAtom(isRunningTestAtom);
-
+  const [unirepUserState] = useAtom(unirepState);
+  const [id] = useAtom(identityState);
   const code = codes?.[curQuesId] || '';
 
   const userCurResult = result?.[curQuesId] ?? {};
 
   const handleTestCode = async () => {
     setIsRunningTest(true);
+
     const data = await fetch(
       `/api/run?${new URLSearchParams({
         questionId: curQuesId,
         code,
+        epochKey: unirepUserState.getEpochKeys()[0],
+        commitment: id.genIdentityCommitment()
       })}`
     );
+    
     const runResult = await data?.json();
     setResult({
       ...result,

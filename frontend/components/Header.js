@@ -1,5 +1,6 @@
 import { ConnectButton } from "web3uikit";
 import Link from "next/link";
+import LoginForm from "./loginForm";
 
 export default function Header() {
   return (
@@ -16,6 +17,7 @@ export default function Header() {
           Start a Test
         </Link>
         <ConnectButton moralisAuth={false} />
+        <LoginForm />
       </div>
     </nav>
   );
