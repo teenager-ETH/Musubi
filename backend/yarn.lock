@@ -1296,6 +1296,16 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@kumarargentra/ecies-25519@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@kumarargentra/ecies-25519/-/ecies-25519-1.0.10.tgz#4400623509eb2dbfa8e48134a9dcee47621646bf"
+  integrity sha512-Z1wxIANVEdBmr4uDWVt8aHJTH7QzOkUEVRrX3DF6CQJsrlO8kWNb+0vl+4HcgMvvcqbBMk/GsICDP4NOmNA0Ww==
+  dependencies:
+    "@stablelib/x25519" "^1.0.2"
+    "@u-connect/crypto" "^1.0.3"
+    "@u-connect/encoding" "^1.0.2"
+    tslib "1.14.1"
+
 "@magic-sdk/commons@^9.6.2":
   version "9.6.2"
   resolved "https://registry.yarnpkg.com/@magic-sdk/commons/-/commons-9.6.2.tgz#db03f98efb771481f4045a3877b6285600f0e96e"
@@ -1906,6 +1916,52 @@
   dependencies:
     antlr4ts "^0.5.0-alpha.4"
 
+"@stablelib/binary@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/binary/-/binary-1.0.1.tgz#c5900b94368baf00f811da5bdb1610963dfddf7f"
+  integrity sha512-ClJWvmL6UBM/wjkvv/7m5VP3GMr9t0osr4yVgLZsLCOz4hGN9gIAFEqnJ0TsSMAN+n840nf2cHZnA5/KFqHC7Q==
+  dependencies:
+    "@stablelib/int" "^1.0.1"
+
+"@stablelib/bytes@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/bytes/-/bytes-1.0.1.tgz#0f4aa7b03df3080b878c7dea927d01f42d6a20d8"
+  integrity sha512-Kre4Y4kdwuqL8BR2E9hV/R5sOrUj6NanZaZis0V6lX5yzqC3hBuVSDXUIBqQv/sCpmuWRiHLwqiT1pqqjuBXoQ==
+
+"@stablelib/int@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/int/-/int-1.0.1.tgz#75928cc25d59d73d75ae361f02128588c15fd008"
+  integrity sha512-byr69X/sDtDiIjIV6m4roLVWnNNlRGzsvxw+agj8CIEazqWGOQp2dTYgQhtyVXV9wpO6WyXRQUzLV/JRNumT2w==
+
+"@stablelib/keyagreement@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/keyagreement/-/keyagreement-1.0.1.tgz#4612efb0a30989deb437cd352cee637ca41fc50f"
+  integrity sha512-VKL6xBwgJnI6l1jKrBAfn265cspaWBPAPEc62VBQrWHLqVgNRE09gQ/AnOEyKUWrrqfD+xSQ3u42gJjLDdMDQg==
+  dependencies:
+    "@stablelib/bytes" "^1.0.1"
+
+"@stablelib/random@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@stablelib/random/-/random-1.0.2.tgz#2dece393636489bf7e19c51229dd7900eddf742c"
+  integrity sha512-rIsE83Xpb7clHPVRlBj8qNe5L8ISQOzjghYQm/dZ7VaM2KHYwMW5adjQjrzTZCchFnNCNhkwtnOBa9HTMJCI8w==
+  dependencies:
+    "@stablelib/binary" "^1.0.1"
+    "@stablelib/wipe" "^1.0.1"
+
+"@stablelib/wipe@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@stablelib/wipe/-/wipe-1.0.1.tgz#d21401f1d59ade56a62e139462a97f104ed19a36"
+  integrity sha512-WfqfX/eXGiAd3RJe4VU2snh/ZPwtSjLG4ynQ/vYzvghTh7dHFcI1wl+nrkWG6lGhukOxOsUHfv8dUXr58D0ayg==
+
+"@stablelib/x25519@^1.0.2":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@stablelib/x25519/-/x25519-1.0.3.tgz#13c8174f774ea9f3e5e42213cbf9fc68a3c7b7fd"
+  integrity sha512-KnTbKmUhPhHavzobclVJQG5kuivH+qDLpe84iRqX3CLrKp881cF160JvXJ+hjn1aMyCwYOKeIZefIH/P5cJoRw==
+  dependencies:
+    "@stablelib/keyagreement" "^1.0.1"
+    "@stablelib/random" "^1.0.2"
+    "@stablelib/wipe" "^1.0.1"
+
 "@storybook/client-logger@6.5.16":
   version "6.5.16"
   resolved "https://registry.yarnpkg.com/@storybook/client-logger/-/client-logger-6.5.16.tgz#955cc46b389e7151c9eb1585a75e6a0605af61a1"
@@ -2336,6 +2392,44 @@
   dependencies:
     "@typescript-eslint/types" "5.10.1"
     eslint-visitor-keys "^3.0.0"
+
+"@u-connect/crypto@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@u-connect/crypto/-/crypto-1.0.3.tgz#f7fe33addfba8c53e0700635f51ba43616a3e5f0"
+  integrity sha512-x0NguqXMvbufBvcXZZcSqWPlZ816RwTxRzxhVEZPluQkhvbXX/qANSuHNBqYtY8/+lICfAr6A9EJXVhUPcbJmA==
+  dependencies:
+    "@u-connect/encoding" "^1.0.2"
+    "@u-connect/environment" "^0.0.1"
+    "@u-connect/randombytes" "^1.0.3"
+    aes-js "^3.1.2"
+    hash.js "^1.1.7"
+    tslib "1.14.1"
+
+"@u-connect/encoding@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@u-connect/encoding/-/encoding-1.0.2.tgz#7b8bfe1fcfbefb2429a2effc79fbf663b582cd50"
+  integrity sha512-6ImvCa9TVhPrl0FFhQZEtZr+5OBKA0DTpR4jCWaTWTwL4yGubtUvulRWb/+0C+mJbgZELNI03NSpUz3Bo8HUFA==
+  dependencies:
+    is-typedarray "1.0.0"
+    tslib "1.14.1"
+    typedarray-to-buffer "3.1.5"
+
+"@u-connect/environment@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@u-connect/environment/-/environment-0.0.1.tgz#e4d56b0750d122a0591963684e12b41837d215c9"
+  integrity sha512-O8NlPOSn0KU0KIbHJgCbFaUgNgQbSE+p5fNdaE6jw/njuC9d9vb9RvdsDDC1un+mPwKzj2QHS+BBINeovQJo+g==
+  dependencies:
+    tslib "1.14.1"
+
+"@u-connect/randombytes@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@u-connect/randombytes/-/randombytes-1.0.3.tgz#323051ba68e144e98d87f6b513e3585062b26413"
+  integrity sha512-nKQhgjywn2aJG/t3fbQpMjk1cL0h/U8IivmJI6aKfU3UlEJ5qdlRjg8pRqBRY06UCsiTJ7L2Al8zZc9a4Fx3JQ==
+  dependencies:
+    "@u-connect/encoding" "^1.0.2"
+    "@u-connect/environment" "^0.0.1"
+    randombytes "^2.1.0"
+    tslib "1.14.1"
 
 "@unirep/circuits@2.0.0-beta-2":
   version "2.0.0-beta-2"

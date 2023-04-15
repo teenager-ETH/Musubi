@@ -9,7 +9,8 @@ import { ethers, providers, Wallet } from 'ethers';
 import { BigNumberish } from '@ethersproject/bignumber'
 import { SnarkProof } from './smart-contract/snark.interface';
 import { UserStateTransitionDto } from './dto/userStateTransition.dto';
-import { SealEpochDto } from './dto/userStateTransition.dto copy';
+import { SealEpochDto } from './dto/sealEpoch.dto';
+import { ApplyDto } from './dto/createApplication.dto';
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 @Injectable()
@@ -205,6 +206,24 @@ export class AppService {
     const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
     try {
       const result = await contract.sealEpoch(epoch, publicSignals, proof);
+      return result;
+    } catch (error) {
+      console.error('Error calling smart contract method:', error);
+      throw error;
+    }
+  }
+
+  public async createApplication(
+    params: ApplyDto
+  ): Promise<any> {
+    const { secret,
+      jobIdx,
+      publicSignals,
+      proof } = params;
+    console.log(params)
+    const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
+    try {
+      const result = await contract.createApplication([jobIdx, secret], jobIdx, publicSignals, proof);
       return result;
     } catch (error) {
       console.error('Error calling smart contract method:', error);

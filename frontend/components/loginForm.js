@@ -8,13 +8,12 @@ import {
 } from './CodingPad/state'
 import { useMoralis } from "react-moralis";
 import { UserState } from '@unirep/core'
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import networkMapping from "../constants/networkMapping.json";
 import { ZkIdentity, stringifyBigInts } from "@unirep/utils";
 import { defaultProver } from "./provers/defaultProver";
-import * as ecies25519 from "@kumarargentra/ecies-25519";
-import { toUtf8Bytes, toUtf8String } from "ethers/lib/utils";
 import { BuildOrderedTree, Circuit } from "@unirep/circuits";
+import { Button } from "@chakra-ui/react";
 
 const login = async (setId, address) => {
     const exampleMessage = 'Example `personal_sign` message.';
@@ -33,12 +32,18 @@ const login = async (setId, address) => {
     }
 }
 const LoginForm = () => {
-
     const { chainId, account } = useMoralis();
     const chainString = chainId ? parseInt(chainId).toString() : "31337";
     const unirepAddress = networkMapping[chainString]?.Unirep;
+    const [id, setId] = useAtom(identityState);
+    const [unirepUserState, setUnirepUserState] = useAtom(unirepState);
+    const [hasSignedUp, setHasSignedUp] = useAtom(signedUpState);
+    const [ed25515keyPair, setEnckeyPairAtom] = useAtom(enckeyPairAtom);
+    const [isRunning, setIsRunning] = useState(false)
 
     const syncUnirep = async (setUserState, identity, setHasSignedUp) => {
+
+        setIsRunning(true)
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const userState = new UserState({
             attesterId: 31376303960552734473851074669000539669478016324n,
@@ -73,27 +78,31 @@ const LoginForm = () => {
         console.log(calcEpoch, latestTEpoch, currentEpoch)
         if (calcEpoch > latestTEpoch) {
             // if(false){
-            const preimages = await userState.sync.genEpochTreePreimages(latestTEpoch)
-            const { circuitInputs } = BuildOrderedTree.buildInputsForLeaves(preimages)
-            const r = await defaultProver.genProofAndPublicSignals(
-                Circuit.buildOrderedTree,
-                stringifyBigInts(circuitInputs)
-            )
-            const o = new BuildOrderedTree(
-                r.publicSignals,
-                r.proof,
-                defaultProver
-            )
+            if (currentEpoch <= latestTEpoch) {
+                const preimages = await userState.sync.genEpochTreePreimages(latestTEpoch)
+                const { circuitInputs } = BuildOrderedTree.buildInputsForLeaves(preimages)
+                const r = await defaultProver.genProofAndPublicSignals(
+                    Circuit.buildOrderedTree,
+                    stringifyBigInts(circuitInputs)
+                )
 
-            const data = await fetch(
-                `/api/sealEpoch?${new URLSearchParams({
-                    body: JSON.stringify({
-                        epoch: latestTEpoch,
-                        publicSignals: o.publicSignals, proof: o.proof
-                    })
-                })}`
-            );
-            await userState.sync.waitForSync();
+
+                const o = new BuildOrderedTree(
+                    r.publicSignals,
+                    r.proof,
+                    defaultProver
+                )
+
+                const data = await fetch(
+                    `/api/sealEpoch?${new URLSearchParams({
+                        body: JSON.stringify({
+                            epoch: latestTEpoch,
+                            publicSignals: o.publicSignals, proof: o.proof
+                        })
+                    })}`
+                );
+                await userState.sync.waitForSync();
+            }
             console.log(await userState.sync.loadCurrentEpoch())
             const { publicSignals, proof } = await userState.genUserStateTransitionProof(await userState.sync.loadCurrentEpoch())
 
@@ -109,39 +118,24 @@ const LoginForm = () => {
             console.log(data2)
         }
         await userState.sync.waitForSync();
-        console.log(await userState.genProveReputationProof({minRep:1}))
-
-
-        const fromHexString = hexString =>
-            new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-        console.log(BigNumber.from(
-            identity.secretHash).toHexString().slice(2))
-        const enckeyPair = ecies25519.generateKeyPair(
-            fromHexString(
-                BigNumber.from(
-                    identity.secretHash).toHexString().slice(2)))
-        setEnckeyPairAtom(enckeyPair)
-        // Encrypt/Decrypt email example
-        const encrypted = await ecies25519.encrypt(toUtf8Bytes('zxc82990@gmail.com'), enckeyPair.publicKey);
-        console.log(encrypted)
-        const secret = await ecies25519.decrypt(encrypted, enckeyPair.privateKey);
-        console.log(toUtf8String(secret))
-        // console.log(await userState.genProveReputationProof({minRep:1 }))
+        setIsRunning(false)
     }
-    const [id, setId] = useAtom(identityState);
-    const [unirepUserState, setUnirepUserState] = useAtom(unirepState);
-    const [hasSignedUp, setHasSignedUp] = useAtom(signedUpState);
-    const [ed25515keyPair, setEnckeyPairAtom] = useAtom(enckeyPairAtom);
 
     useEffect(() => {
         if (id.trapdoor) {
             syncUnirep(setUnirepUserState, id, setHasSignedUp, setEnckeyPairAtom)
         }
     }, [id.trapdoor]);
-    if (hasSignedUp) return ''
+    if (hasSignedUp && !isRunning) return ''
     return (
         <div>
-            <button onClick={(e) => { login(setId, account) }}>Sign In</button>
+            <Button
+                isLoading={isRunning}
+                loadingText='Initializing...'
+                bg='blue.600'
+                _hover={{ bg: 'blue.700' }}
+                className='px-2 py-1 bg-blue-600 text-white rounded-md w-full hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600'
+                onClick={(e) => { login(setId, account) }}>Sign In</Button>
         </div>
     )
 }

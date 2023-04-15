@@ -1,39 +1,41 @@
 const { assert, expect } = require("chai");
 const { network, deployments, ethers, getNamedAccounts } = require("hardhat");
 const { developmentChains } = require("../helper-hardhat-config");
-const deployUnirep= require("../deploy/Unirep/deployUnirep");
+const ecies25519 =  require("@kumarargentra/ecies-25519");
+const { BigNumber } = require("ethers");
+const { keccak256, toUtf8Bytes } = require("ethers/lib/utils");
 
-!developmentChains.includes(network.name)
-    ? describe.skip
-    : describe("Attest", function () {
-        let Attest, Unirep, deployer, attester, employer;
+describe("Attest", function () {
+        let Attest, Unirep, recuiter, attester, employer;
         beforeEach(async function () {
             accounts = await ethers.getSigners();
-            deployer = accounts[0];
-            attester = accounts[1];
-            employer = accounts[2];
+            recuiter = accounts[0];
             //   await deployments.fixture(["all"]);
-            Unirep = await deployUnirep(accounts[0])
-
+            // Unirep = await deployUnirep(accounts[0])
+            console.log(recuiter, attester, employer)
             const AttestContractFactory = await ethers.getContractFactory("Attest"); // default account is deployer
-            Attest = await AttestContractFactory.connect(attester).deploy(Unirep.address)
-
+            Attest = await AttestContractFactory.connect(recuiter).deploy('0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e')
+            await Attest.deployed()
         });
-        it("should return the correct price", async function () {
-            //       await talentsPoolConnectedTalent.listBadge(talentBadge.address, BADGE_ID, PRICE); // talent list badge on the market
-            //       await talentsPoolConnectedEmployer.prepayBadge(talentBadge.address, BADGE_ID, {
-            //           value: PRICE,
-            //       }); // employer prepay badge
-            //       // get balance of talent
-            //       const prevBalance = await ethers.provider.getBalance(talent.address);
-            //       const txResponse = await talentsPoolConnectedTalent.withdrawIncome(); // talent withdraw income
-            //       const txReceipt = await txResponse.wait();
-            //       const gasUsed = txReceipt.gasUsed;
-            //       const gasPrice = txResponse.gasPrice;
-            //       const gasCost = gasUsed.mul(gasPrice);
+        it("should create Job", async function () {
+            const fromHexString = hexString =>
+            new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
 
-            //       // get balance of talent
-            //       const curBalance = await ethers.provider.getBalance(talent.address);
-            //       assert.equal(prevBalance.add(PRICE).sub(gasCost).toString(), curBalance.toString());
+            const jd = 'A great Job'
+            const kp = ecies25519.generateKeyPair();
+            const pkint = BigNumber.from(kp.publicKey)
+            const hash = toUtf8Bytes('1'+jd+pkint.toString())
+            console.log(hash)
+            await Attest.connect(recuiter).createJob([
+                keccak256(hash),
+                1,
+                jd,
+                pkint.toBigInt(),
+            ])
+            const jobs = await Attest.getJobs(recuiter.address);
+            const job = await Attest.job(jobs[0])
+            console.log(jobs, job)
+            expect(job.key).to.equal(pkint.toHexString())
+
         });
     });

@@ -16,7 +16,8 @@ import { JudgerRunDto, JudgerResultDto } from "./dto/judgerRun.dto";
 import { AppService } from "./app.service";
 import { UserSignUpDto } from "./dto/userSignUp.dto";
 import { UserStateTransitionDto } from "./dto/userStateTransition.dto";
-import { SealEpochDto } from "./dto/userStateTransition.dto copy";
+import { SealEpochDto } from "./dto/sealEpoch.dto";
+import { ApplyDto } from "./dto/createApplication.dto";
 
 
 @Controller()
@@ -132,9 +133,26 @@ export class AppController {
   @Post('sealEpoch')
   async sealEpoch(@Body() body: SealEpochDto) {
 
-    const { epoch, publicSignals, proof} = body;
+    const { epoch, publicSignals, proof } = body;
     const result = await this.appService.sealEpoch({
       epoch, publicSignals, proof
+    });
+    return {
+      result
+    }
+  }
+
+  @Post('createApplication')
+  async createApplication(@Body() body: ApplyDto) {
+
+    const {
+      secret,
+      jobIdx,
+      publicSignals,
+      proof } = body;
+    const result = await this.appService.createApplication({
+      secret,
+      jobIdx, publicSignals, proof
     });
     return {
       result
