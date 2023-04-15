@@ -20,10 +20,10 @@ export default function CodeResult() {
   const code = codes?.[curQuesId] || '';
 
   const userCurResult = result?.[curQuesId] ?? {};
-
+  
   const handleTestCode = async () => {
     setIsRunningTest(true);
-
+    // console.log(await unirepUserState.genProveReputationProof({minRep: 1}))
     const data = await fetch(
       `/api/run?${new URLSearchParams({
         questionId: curQuesId,

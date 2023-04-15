@@ -128,6 +128,29 @@ export const AttestAbi = [
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "publicSignals",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[8]",
+        "name": "proof",
+        "type": "uint256[8]"
+      }
+    ],
+    "name": "sealEpoch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "newOwner",
         "type": "address"
@@ -159,11 +182,6 @@ export const AttestAbi = [
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "epoch",
-        "type": "uint256"
-      },
-      {
         "internalType": "uint256[]",
         "name": "publicSignals",
         "type": "uint256[]"
@@ -171,16 +189,6 @@ export const AttestAbi = [
       {
         "internalType": "uint256[8]",
         "name": "proof",
-        "type": "uint256[8]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "orderedTreePublicSignals",
-        "type": "uint256[]"
-      },
-      {
-        "internalType": "uint256[8]",
-        "name": "orderedTreeProof",
         "type": "uint256[8]"
       }
     ],

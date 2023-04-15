@@ -46,12 +46,10 @@ const LoginForm = () => {
             unirepAddress: unirepAddress,
             provider, // an ethers.js provider
         }, identity)
-        console.log(userState)
+
         setUserState(userState)
         await userState.sync.start()
-        console.log(1)
         await userState.sync.waitForSync()
-        console.log(2)
 
         const signedUp = await userState.hasSignedUp()
         setHasSignedUp(signedUp)
@@ -68,13 +66,14 @@ const LoginForm = () => {
             setHasSignedUp(signedUp)
             await userState.sync.waitForSync();
         }
-        console.log(await userState.sync.calcCurrentEpoch())
-        
-        const toEpoch = await userState.sync.loadCurrentEpoch()
+        console.log(userState.sync.settings)
+        const calcEpoch = await userState.sync.calcCurrentEpoch()
+        const currentEpoch = await userState.sync.loadCurrentEpoch()
         const latestTEpoch = await userState.latestTransitionedEpoch()
-        console.log(toEpoch, latestTEpoch)
-        if (latestTEpoch < toEpoch) {
-            const preimages = await userState.sync.genEpochTreePreimages(toEpoch)
+        console.log(calcEpoch, latestTEpoch, currentEpoch)
+        if (calcEpoch > latestTEpoch) {
+            // if(false){
+            const preimages = await userState.sync.genEpochTreePreimages(latestTEpoch)
             const { circuitInputs } = BuildOrderedTree.buildInputsForLeaves(preimages)
             const r = await defaultProver.genProofAndPublicSignals(
                 Circuit.buildOrderedTree,
@@ -85,21 +84,33 @@ const LoginForm = () => {
                 r.proof,
                 defaultProver
             )
-            const { publicSignals, proof } = await userState.genUserStateTransitionProof(toEpoch)
+
             const data = await fetch(
-                `/api/userStateTransition?${new URLSearchParams({
+                `/api/sealEpoch?${new URLSearchParams({
                     body: JSON.stringify({
-                        epoch: toEpoch,
-                        publicSignals, proof,
-                        orderedTreePublicSignals:o.publicSignals,
-                        orderedTreeProof:o.proof
+                        epoch: latestTEpoch,
+                        publicSignals: o.publicSignals, proof: o.proof
                     })
                 })}`
             );
-            console.log(data)
+            await userState.sync.waitForSync();
+            console.log(await userState.sync.loadCurrentEpoch())
+            const { publicSignals, proof } = await userState.genUserStateTransitionProof(await userState.sync.loadCurrentEpoch())
+
+            const data2 = await fetch(
+                `/api/userStateTransition?${new URLSearchParams({
+                    body: JSON.stringify({
+                        publicSignals, proof
+                    })
+                })}`
+            );
+            await userState.sync.waitForSync();
+            console.log(await userState.sync.loadCurrentEpoch())
+            console.log(data2)
         }
         await userState.sync.waitForSync();
-        // console.log(await userState.genProveReputationProof({proveZeroRep:true}))
+        console.log(await userState.genProveReputationProof({minRep:1}))
+
 
         const fromHexString = hexString =>
             new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));

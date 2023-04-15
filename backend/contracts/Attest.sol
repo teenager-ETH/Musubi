@@ -8,7 +8,7 @@ error QuestionIdAlreadyClaimed(uint256 identityCommitment, uint256 qid);
 contract Attest is Ownable {
     mapping(uint => mapping(uint => bool)) public attestRecord; //commitment=>qid=>if attest
     Unirep private unirep;
-    uint256 public constant EPOCH_LENGTH = 60*10;
+    uint256 public constant EPOCH_LENGTH = 300;
 
     constructor(address _unirep) {
         unirep = Unirep(_unirep);
@@ -17,6 +17,14 @@ contract Attest is Ownable {
 
     function userSignUp(uint256[] memory publicSignals, uint256[8] memory proof) public onlyOwner {
         unirep.userSignUp(publicSignals, proof);
+    }
+
+    function sealEpoch(
+        uint256 epoch,
+        uint256[] memory publicSignals,
+        uint256[8] memory proof
+    ) public onlyOwner {
+        unirep.sealEpoch(epoch, uint160(address(this)), publicSignals, proof);
     }
 
     function userStateTransition(

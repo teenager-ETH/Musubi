@@ -9,6 +9,7 @@ import { ethers, providers, Wallet } from 'ethers';
 import { BigNumberish } from '@ethersproject/bignumber'
 import { SnarkProof } from './smart-contract/snark.interface';
 import { UserStateTransitionDto } from './dto/userStateTransition.dto';
+import { SealEpochDto } from './dto/userStateTransition.dto copy';
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 @Injectable()
@@ -197,20 +198,27 @@ export class AppService {
     }
   }
 
+  public async sealEpoch(
+    params: SealEpochDto
+  ): Promise<any> {
+    const { epoch, publicSignals, proof } = params;
+    const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
+    try {
+      const result = await contract.sealEpoch(epoch, publicSignals, proof);
+      return result;
+    } catch (error) {
+      console.error('Error calling smart contract method:', error);
+      throw error;
+    }
+  }
+
   public async userStateTransition(
     params: UserStateTransitionDto
   ): Promise<any> {
-    const { epoch, publicSignals, proof,
-      orderedTreePublicSignals,
-      orderedTreeProof } = params;
-    console.log(epoch, publicSignals, proof,
-      orderedTreePublicSignals,
-      orderedTreeProof)
+    const { publicSignals, proof } = params;
     const contract = new ethers.Contract(this.config.attestAddr, AttestAbi, this.wallet);
     try {
-      const result = await contract.userStateTransition(epoch, publicSignals, proof,
-        orderedTreePublicSignals,
-        orderedTreeProof);
+      const result = await contract.userStateTransition(publicSignals, proof);
       return result;
     } catch (error) {
       console.error('Error calling smart contract method:', error);

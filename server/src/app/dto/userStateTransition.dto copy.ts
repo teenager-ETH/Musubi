@@ -1,7 +1,8 @@
 import { IsArray } from 'class-validator';
 import { BigNumberish } from '@ethersproject/bignumber'
 
-export class UserStateTransitionDto {
+export class SealEpochDto {
+    epoch!: BigNumberish;
     @IsArray()
     publicSignals!: BigNumberish[];
     @IsArray()
