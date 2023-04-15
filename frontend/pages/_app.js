@@ -9,10 +9,10 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 // follow the ApolloClient doc
 const client = new ApolloClient({
   cache: new InMemoryCache(), // help with refresh
-  uri: "https://", // api for subgraph: temperary query url from subgraph if testnet
+  uri: "https://api.studio.thegraph.com/query/45023/musubi/v0.0.2", // api for subgraph: temperary query url from subgraph if testnet
 });
 
-export default function App({ Component, pageProps }) {
+function App({ Component, pageProps }) {
   return (
     <div>
       <Head>
