@@ -29,4 +29,4 @@ For permanent data storage, we employed Piñata/IPFS solutions and plan to exten
 
 To query data from smart contract events, we implemented The Graph for complete decentralization.
 ## Contact us
-- Twitter account: <a href="https://twitter.com/UniRep_Protocol"><img src="https://img.shields.io/twitter/follow/UniRep_Protocol?style=flat-square&logo=twitter"></a>
+- Twitter account: <a href="https://twitter.com/@MusubiLabs">Musubi</a>
