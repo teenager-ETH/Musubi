@@ -28,3 +28,5 @@ To maintain talents' privacy, we utilized UniRep solutions, which allow us to pr
 For permanent data storage, we employed Piñata/IPFS solutions and plan to extend this to NFT storage and FVM Solutions in the future.
 
 To query data from smart contract events, we implemented The Graph for complete decentralization.
+## Contact us
+- Twitter account: <a href="https://twitter.com/UniRep_Protocol"><img src="https://img.shields.io/twitter/follow/UniRep_Protocol?style=flat-square&logo=twitter"></a>
