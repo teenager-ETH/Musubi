@@ -1,4 +1,5 @@
-# Project Description
+# Musubi
+## Project Description
 
 Initial Product Goal: Enable everyone, from non-tech founders to Web3 natives, to swiftly find web3 engineering talent while empowering talents to fully control their own data and minimize trust barriers.
 
@@ -15,8 +16,8 @@ Clients (recruiters) user flow: Filter talents from the pool directly and make t
 
 Although the above flows haven't been fully completed yet, we are working tirelessly to make both flows available for use as soon as possible.
 
-How it's Made
-How it's made: Drawing from our experience in the web2 recruiting space, we identified the pain points of centralized solutions and the complexities of hiring overseas employees, particularly in the absence of a proper standard, payment layer, and an intense political environment.
+## How it's Made
+Drawing from our experience in the web2 recruiting space, we identified the pain points of centralized solutions and the complexities of hiring overseas employees, particularly in the absence of a proper standard, payment layer, and an intense political environment.
 
 As a result, we decided to create a fully decentralized platform. We used The Graph for data querying, IPFS for data storage, and UniRep for privacy protection. This ensures our platform is accessible anywhere in the world with internet and computer access.
 
