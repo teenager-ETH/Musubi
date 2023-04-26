@@ -6,7 +6,7 @@ After the ETHGlobal Tokyo Hackathon, we have been continuously developing the to
 Initial Product Goal: Enable everyone, from non-tech founders to Web3 natives, to swiftly find web3 engineering talent while empowering talents to fully control their own data and minimize trust barriers.
 
 Our Project Mission: 
-We want to build a community of engineers where merit is the sole criterion, without considering one's background.
+Finding engineers where merit is the primary consideration, with a focus on avoiding demographic factors as the initial screening criteria.
 
 This project consists of 4 main components:
 
