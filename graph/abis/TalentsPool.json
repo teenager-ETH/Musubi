@@ -1,0 +1,215 @@
+[
+  {
+    "inputs": [
+      { "internalType": "address", "name": "talentAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" }
+    ],
+    "name": "TalentsPool__BadgeAlreadyListed",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "talentAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" }
+    ],
+    "name": "TalentsPool__BadgeNotListed",
+    "type": "error"
+  },
+  { "inputs": [], "name": "TalentsPool__NoEarnings", "type": "error" },
+  {
+    "inputs": [],
+    "name": "TalentsPool__NotApprovedForListing",
+    "type": "error"
+  },
+  { "inputs": [], "name": "TalentsPool__OnlyOwner", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "talentAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" }
+    ],
+    "name": "TalentsPool__PayNotEnough",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TalentsPool__PriceMustBeGreaterThanZero",
+    "type": "error"
+  },
+  { "inputs": [], "name": "TalentsPool__TransferFailed", "type": "error" },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "talentAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "badgeAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "badgeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      }
+    ],
+    "name": "BadgeListed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "clientAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "badgeAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "badgeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "talentAddress",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "price",
+        "type": "uint256"
+      }
+    ],
+    "name": "BadgePrepaid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "talentAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "badgeAddress",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "badgeId",
+        "type": "uint256"
+      }
+    ],
+    "name": "BadgeUnlisted",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "badgeAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" }
+    ],
+    "name": "getBadgeListing",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "talentAddress",
+            "type": "address"
+          },
+          { "internalType": "uint256", "name": "price", "type": "uint256" }
+        ],
+        "internalType": "struct TalentsPool.BadgeListing",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "talentAddress", "type": "address" }
+    ],
+    "name": "getEarnings",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "badgeAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" },
+      { "internalType": "uint256", "name": "price", "type": "uint256" }
+    ],
+    "name": "listBadge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "badgeAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" }
+    ],
+    "name": "prepayBadge",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "badgeAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" }
+    ],
+    "name": "unlistBadge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "badgeAddress", "type": "address" },
+      { "internalType": "uint256", "name": "badgeId", "type": "uint256" },
+      { "internalType": "uint256", "name": "newPrice", "type": "uint256" }
+    ],
+    "name": "updatePrice",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "withdrawEarnings",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
