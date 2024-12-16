@@ -45,7 +45,7 @@ export default function BadgeHolder({
   async function updateUI() {
     const badgeURI = await getBadgeURI();
     console.log("badgeURI", badgeURI);
-    // not every brwoser supports IPFS. So we need to use https instead of ipfs edition
+    // not every browser supports IPFS. So we need to use https instead of ipfs edition
     if (badgeURI && badgeURI.includes("ipfs://")) {
       // IPFS Gateway: make https call to return IPFS files
       const requestURL = badgeURI.replace("ipfs://", "https://ipfs.io/ipfs/");
