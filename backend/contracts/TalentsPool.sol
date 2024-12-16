@@ -122,7 +122,7 @@ contract TalentsPool {
             revert TalentsPool__PayNotEnough(badgeAddress, badgeId, listedBadge.price);
         }
         s_earnings[listedBadge.talentAddress] += msg.value;
-        // delete s_badgeListings[badgeAddress][badgeId]; // shoudn't delete the listing, the talents can accept multiple tasks if they'd like
+        // delete s_badgeListings[badgeAddress][badgeId]; // shouldn't delete the listing, the talents can accept multiple tasks if they'd like
 
         // don't transfer the payment to the talent address, let talents withdraw their earnings.
         emit BadgePrepaid(
